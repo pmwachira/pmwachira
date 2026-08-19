@@ -37,13 +37,13 @@ I design and maintain production data pipelines — orchestration, ELT, and anal
 
 ### 📊 Language Breakdown
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=pmwachira&layout=compact&hide_border=true&theme=default" alt="Top Languages"/>
-</p>
+_Auto-updated weekly by a GitHub Action — no third-party service dependency._
 
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=pmwachira&show_icons=true&hide_border=true&count_private=true" alt="GitHub Stats"/>
-</p>
+<!-- LANG-STATS:START -->
+| Language | Share |
+|---|---|
+| Python | 100.0% |
+<!-- LANG-STATS:END -->
 
 ---
 
@@ -60,6 +60,6 @@ I design and maintain production data pipelines — orchestration, ELT, and anal
 
 ### 📬 Get in Touch
 
-Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [LinkedIn](https://www.linkedin.com/in/pmwachira/) [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
+Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [LinkedIn](https://www.linkedin.com/in/pmwachira/) or [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
 
 <p align="center"><sub>Profile views and stats above update automatically — nothing on this page is manually maintained.</sub></p>
