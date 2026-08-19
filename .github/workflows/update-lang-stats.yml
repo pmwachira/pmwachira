@@ -96,6 +96,13 @@ jobs:
                 restrictedContributionsCount
                 totalPullRequestContributions
                 totalIssueContributions
+                commitContributionsByRepository(maxRepositories: 100) {
+                  contributions { totalCount }
+                  repository {
+                    isPrivate
+                    primaryLanguage { name }
+                  }
+                }
               }
               repositories(privacy: PRIVATE, ownerAffiliations: OWNER) { totalCount }
               publicRepos: repositories(privacy: PUBLIC, ownerAffiliations: OWNER) { totalCount }
@@ -123,6 +130,27 @@ jobs:
               f"| Private repos | {private_repo_count} |"
           )
 
+          # ---- Technology of commits: commit count per primary language ----
+          # Note: only covers repos visible to the PAT (own repos, public + private).
+          # This is commit *volume* per language, distinct from the byte-based
+          # language breakdown above (a language can dominate commit count while
+          # being a small share of total bytes, or vice versa).
+          commit_lang_totals = Counter()
+          for entry in contrib["commitContributionsByRepository"]:
+              repo_info = entry["repository"]
+              lang = repo_info["primaryLanguage"]["name"] if repo_info["primaryLanguage"] else "Other"
+              commit_lang_totals[lang] += entry["contributions"]["totalCount"]
+
+          total_lang_commits = sum(commit_lang_totals.values()) or 1
+          commit_lang_rows = []
+          for lang, count in commit_lang_totals.most_common(8):
+              pct = 100 * count / total_lang_commits
+              commit_lang_rows.append(f"| {lang} | {count} | {pct:.1f}% |")
+          commit_lang_table = (
+              "| Language | Commits | Share |\n|---|---|---|\n"
+              + "\n".join(commit_lang_rows)
+          )
+
           readme = open("README.md").read()
 
           readme = re.sub(
@@ -133,6 +161,11 @@ jobs:
           readme = re.sub(
               r"<!-- COMMIT-STATS:START -->.*?<!-- COMMIT-STATS:END -->",
               f"<!-- COMMIT-STATS:START -->\n{commit_table}\n<!-- COMMIT-STATS:END -->",
+              readme, flags=re.DOTALL
+          )
+          readme = re.sub(
+              r"<!-- COMMIT-LANG-STATS:START -->.*?<!-- COMMIT-LANG-STATS:END -->",
+              f"<!-- COMMIT-LANG-STATS:START -->\n{commit_lang_table}\n<!-- COMMIT-LANG-STATS:END -->",
               readme, flags=re.DOTALL
           )
 
