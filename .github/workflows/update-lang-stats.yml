@@ -1,4 +1,4 @@
-name: Update Language Stats
+name: Update Profile Stats
 
 on:
   schedule:
@@ -13,9 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compute language breakdown and update README
+      - name: Compute stats and update README
         env:
+          # GITHUB_TOKEN only sees this repo — fine for nothing here, kept for repo checkout/push.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Fine-grained PAT scoped to "All repositories" / Contents: Read-only.
+          # Required to see private repos and private contribution counts.
+          STATS_PAT: ${{ secrets.STATS_PAT }}
           GH_USERNAME: pmwachira
         run: |
           python3 - <<'EOF'
@@ -23,40 +27,96 @@ jobs:
           from collections import Counter
 
           username = os.environ["GH_USERNAME"]
-          token = os.environ["GH_TOKEN"]
+          pat = os.environ["STATS_PAT"]
 
-          def gh(url):
+          def gh_rest(url):
               result = subprocess.run(
-                  ["curl", "-s", "-H", f"Authorization: Bearer {token}",
+                  ["curl", "-s", "-H", f"Authorization: Bearer {pat}",
                    "-H", "Accept: application/vnd.github+json", url],
                   capture_output=True, text=True
               )
               return json.loads(result.stdout)
 
-          repos = gh(f"https://api.github.com/users/{username}/repos?per_page=100&type=owner")
+          def gh_graphql(query, variables):
+              payload = json.dumps({"query": query, "variables": variables})
+              result = subprocess.run(
+                  ["curl", "-s", "-X", "POST",
+                   "-H", f"Authorization: Bearer {pat}",
+                   "-H", "Content-Type: application/json",
+                   "-d", payload,
+                   "https://api.github.com/graphql"],
+                  capture_output=True, text=True
+              )
+              return json.loads(result.stdout)
+
+          # ---- Language breakdown (includes private repos, since PAT can see them) ----
+          repos = gh_rest(f"https://api.github.com/user/repos?per_page=100&affiliation=owner")
           totals = Counter()
           for repo in repos:
               if repo.get("fork"):
                   continue
-              langs = gh(repo["languages_url"])
-              for lang, bytes_ in langs.items():
-                  totals[lang] += bytes_
+              langs = gh_rest(repo["languages_url"])
+              if isinstance(langs, dict):
+                  for lang, bytes_ in langs.items():
+                      totals[lang] += bytes_
 
           total_bytes = sum(totals.values()) or 1
-          rows = []
+          lang_rows = []
           for lang, count in totals.most_common(8):
               pct = 100 * count / total_bytes
-              rows.append(f"| {lang} | {pct:.1f}% |")
+              lang_rows.append(f"| {lang} | {pct:.1f}% |")
+          lang_table = "| Language | Share |\n|---|---|\n" + "\n".join(lang_rows)
 
-          table = "| Language | Share |\n|---|---|\n" + "\n".join(rows)
+          # ---- Commit stats, including private contributions ----
+          query = """
+          query($login: String!) {
+            user(login: $login) {
+              contributionsCollection(includeRestrictedContributions: true) {
+                totalCommitContributions
+                restrictedContributionsCount
+                totalPullRequestContributions
+                totalIssueContributions
+              }
+              repositories(privacy: PRIVATE, ownerAffiliations: OWNER) { totalCount }
+              publicRepos: repositories(privacy: PUBLIC, ownerAffiliations: OWNER) { totalCount }
+            }
+          }
+          """
+          result = gh_graphql(query, {"login": username})
+          contrib = result["data"]["user"]["contributionsCollection"]
+          private_repo_count = result["data"]["user"]["repositories"]["totalCount"]
+          public_repo_count = result["data"]["user"]["publicRepos"]["totalCount"]
+
+          visible_commits = contrib["totalCommitContributions"]
+          restricted_commits = contrib["restrictedContributionsCount"]
+          total_commits = visible_commits + restricted_commits
+
+          commit_table = (
+              "| Metric | Count |\n"
+              "|---|---|\n"
+              f"| Commits (last year, incl. private) | {total_commits} |\n"
+              f"| — visible commits | {visible_commits} |\n"
+              f"| — restricted-repo commits | {restricted_commits} |\n"
+              f"| Pull requests opened | {contrib['totalPullRequestContributions']} |\n"
+              f"| Issues opened | {contrib['totalIssueContributions']} |\n"
+              f"| Public repos | {public_repo_count} |\n"
+              f"| Private repos | {private_repo_count} |"
+          )
 
           readme = open("README.md").read()
-          new_readme = re.sub(
+
+          readme = re.sub(
               r"<!-- LANG-STATS:START -->.*?<!-- LANG-STATS:END -->",
-              f"<!-- LANG-STATS:START -->\n{table}\n<!-- LANG-STATS:END -->",
+              f"<!-- LANG-STATS:START -->\n{lang_table}\n<!-- LANG-STATS:END -->",
               readme, flags=re.DOTALL
           )
-          open("README.md", "w").write(new_readme)
+          readme = re.sub(
+              r"<!-- COMMIT-STATS:START -->.*?<!-- COMMIT-STATS:END -->",
+              f"<!-- COMMIT-STATS:START -->\n{commit_table}\n<!-- COMMIT-STATS:END -->",
+              readme, flags=re.DOTALL
+          )
+
+          open("README.md", "w").write(readme)
           EOF
 
       - name: Commit changes
@@ -64,5 +124,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git diff --staged --quiet || git commit -m "chore: update language stats"
+          git diff --staged --quiet || git commit -m "chore: update profile stats"
           git push
