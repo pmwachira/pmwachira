@@ -91,7 +91,7 @@ jobs:
           query = """
           query($login: String!) {
             user(login: $login) {
-              contributionsCollection(includeRestrictedContributions: true) {
+              contributionsCollection {
                 totalCommitContributions
                 restrictedContributionsCount
                 totalPullRequestContributions
