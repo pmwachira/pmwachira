@@ -1,4 +1,4 @@
-<h1 align="center">Hi, I'm Mushirih Wachira 👋</h1>
+<h1 align="center">Hi, I'm Mushirih 👋</h1>
 <h3 align="center">Data Engineer · Building reliable pipelines with Python, SQL, Airflow & dbt</h3>
 
 <p align="center">
