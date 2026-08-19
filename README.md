@@ -42,14 +42,7 @@ _Auto-updated weekly by a GitHub Action — includes private repos, no third-par
 <!-- LANG-STATS:START -->
 | Language | Share |
 |---|---|
-| Jupyter Notebook | 91.3% |
-| PHP | 2.4% |
-| JavaScript | 2.2% |
-| Java | 2.1% |
-| CSS | 0.9% |
-| Python | 0.5% |
-| HTML | 0.3% |
-| LookML | 0.2% |
+| Python | 100.0% |
 <!-- LANG-STATS:END -->
 
 ### 📈 Activity
@@ -59,14 +52,24 @@ _Includes private-repo commits (counted, not exposed — file names and messages
 <!-- COMMIT-STATS:START -->
 | Metric | Count |
 |---|---|
-| Commits (last year, incl. private) | 603 |
-| — visible commits | 21 |
-| — restricted-repo commits | 582 |
-| Pull requests opened | 0 |
-| Issues opened | 0 |
-| Public repos | 28 |
-| Private repos | 3 |
+| Commits (last year, incl. private) | — |
+| — visible commits | — |
+| — restricted-repo commits | — |
+| Pull requests opened | — |
+| Issues opened | — |
+| Public repos | — |
+| Private repos | — |
 <!-- COMMIT-STATS:END -->
+
+### 🧬 Technology of Commits
+
+_Commit volume per primary language, last 12 months — distinct from the byte-based breakdown above (a language can dominate commit count while being a small share of total code, or vice versa)._
+
+<!-- COMMIT-LANG-STATS:START -->
+| Language | Commits | Share |
+|---|---|---|
+| — | — | — |
+<!-- COMMIT-LANG-STATS:END -->
 
 ---
 
