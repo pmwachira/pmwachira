@@ -42,7 +42,14 @@ _Auto-updated weekly by a GitHub Action — no third-party service dependency._
 <!-- LANG-STATS:START -->
 | Language | Share |
 |---|---|
-| Python | 100.0% |
+| Jupyter Notebook | 91.6% |
+| PHP | 2.4% |
+| JavaScript | 2.2% |
+| Java | 2.1% |
+| CSS | 0.9% |
+| Python | 0.5% |
+| HTML | 0.3% |
+| Hack | 0.0% |
 <!-- LANG-STATS:END -->
 
 ---
