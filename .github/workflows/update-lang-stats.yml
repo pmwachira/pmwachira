@@ -1,0 +1,68 @@
+name: Update Language Stats
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC
+  workflow_dispatch: {}     # allows manual trigger from the Actions tab
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute language breakdown and update README
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USERNAME: pmwachira
+        run: |
+          python3 - <<'EOF'
+          import json, os, subprocess, re
+          from collections import Counter
+
+          username = os.environ["GH_USERNAME"]
+          token = os.environ["GH_TOKEN"]
+
+          def gh(url):
+              result = subprocess.run(
+                  ["curl", "-s", "-H", f"Authorization: Bearer {token}",
+                   "-H", "Accept: application/vnd.github+json", url],
+                  capture_output=True, text=True
+              )
+              return json.loads(result.stdout)
+
+          repos = gh(f"https://api.github.com/users/{username}/repos?per_page=100&type=owner")
+          totals = Counter()
+          for repo in repos:
+              if repo.get("fork"):
+                  continue
+              langs = gh(repo["languages_url"])
+              for lang, bytes_ in langs.items():
+                  totals[lang] += bytes_
+
+          total_bytes = sum(totals.values()) or 1
+          rows = []
+          for lang, count in totals.most_common(8):
+              pct = 100 * count / total_bytes
+              rows.append(f"| {lang} | {pct:.1f}% |")
+
+          table = "| Language | Share |\n|---|---|\n" + "\n".join(rows)
+
+          readme = open("README.md").read()
+          new_readme = re.sub(
+              r"<!-- LANG-STATS:START -->.*?<!-- LANG-STATS:END -->",
+              f"<!-- LANG-STATS:START -->\n{table}\n<!-- LANG-STATS:END -->",
+              readme, flags=re.DOTALL
+          )
+          open("README.md", "w").write(new_readme)
+          EOF
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --staged --quiet || git commit -m "chore: update language stats"
+          git push
