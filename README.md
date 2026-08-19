@@ -37,20 +37,29 @@ I design and maintain production data pipelines — orchestration, ELT, and anal
 
 ### 📊 Language Breakdown
 
-_Auto-updated weekly by a GitHub Action — no third-party service dependency._
+_Auto-updated weekly by a GitHub Action — includes private repos, no third-party service dependency._
 
 <!-- LANG-STATS:START -->
 | Language | Share |
 |---|---|
-| Jupyter Notebook | 91.6% |
-| PHP | 2.4% |
-| JavaScript | 2.2% |
-| Java | 2.1% |
-| CSS | 0.9% |
-| Python | 0.5% |
-| HTML | 0.3% |
-| Hack | 0.0% |
+| Python | 100.0% |
 <!-- LANG-STATS:END -->
+
+### 📈 Activity
+
+_Includes private-repo commits (counted, not exposed — file names and messages stay private)._
+
+<!-- COMMIT-STATS:START -->
+| Metric | Count |
+|---|---|
+| Commits (last year, incl. private) | — |
+| — visible commits | — |
+| — restricted-repo commits | — |
+| Pull requests opened | — |
+| Issues opened | — |
+| Public repos | — |
+| Private repos | — |
+<!-- COMMIT-STATS:END -->
 
 ---
 
@@ -67,6 +76,6 @@ _Auto-updated weekly by a GitHub Action — no third-party service dependency._
 
 ### 📬 Get in Touch
 
-Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [LinkedIn](https://www.linkedin.com/in/pmwachira/) or [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
+Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [linkedIn] (https://www.linkedin.com/in/pmwachira/) [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
 
 <p align="center"><sub>Profile views and stats above update automatically — nothing on this page is manually maintained.</sub></p>
