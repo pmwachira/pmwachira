@@ -35,7 +35,14 @@ jobs:
                    "-H", "Accept: application/vnd.github+json", url],
                   capture_output=True, text=True
               )
-              return json.loads(result.stdout)
+              data = json.loads(result.stdout)
+              if isinstance(data, dict) and "message" in data:
+                  raise RuntimeError(
+                      f"GitHub API error calling {url}: {data.get('message')} "
+                      f"(check that the STATS_PAT secret exists, is not expired, "
+                      f"and has Contents:Read + Metadata:Read on all repos)"
+                  )
+              return data
 
           def gh_graphql(query, variables):
               payload = json.dumps({"query": query, "variables": variables})
@@ -47,10 +54,23 @@ jobs:
                    "https://api.github.com/graphql"],
                   capture_output=True, text=True
               )
-              return json.loads(result.stdout)
+              data = json.loads(result.stdout)
+              if "errors" in data:
+                  raise RuntimeError(f"GraphQL error: {data['errors']}")
+              if "data" not in data or data["data"] is None:
+                  raise RuntimeError(f"Unexpected GraphQL response: {data}")
+              return data
+
+          if not pat:
+              raise RuntimeError(
+                  "STATS_PAT is empty — add it under Settings > Secrets and "
+                  "variables > Actions in this repo."
+              )
 
           # ---- Language breakdown (includes private repos, since PAT can see them) ----
           repos = gh_rest(f"https://api.github.com/user/repos?per_page=100&affiliation=owner")
+          if not isinstance(repos, list):
+              raise RuntimeError(f"Expected a list of repos, got: {repos}")
           totals = Counter()
           for repo in repos:
               if repo.get("fork"):
