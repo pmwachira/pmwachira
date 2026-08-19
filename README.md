@@ -42,7 +42,14 @@ _Auto-updated weekly by a GitHub Action — includes private repos, no third-par
 <!-- LANG-STATS:START -->
 | Language | Share |
 |---|---|
-| Python | 100.0% |
+| Jupyter Notebook | 91.3% |
+| PHP | 2.4% |
+| JavaScript | 2.2% |
+| Java | 2.1% |
+| CSS | 0.9% |
+| Python | 0.5% |
+| HTML | 0.3% |
+| LookML | 0.2% |
 <!-- LANG-STATS:END -->
 
 ### 📈 Activity
@@ -52,13 +59,13 @@ _Includes private-repo commits (counted, not exposed — file names and messages
 <!-- COMMIT-STATS:START -->
 | Metric | Count |
 |---|---|
-| Commits (last year, incl. private) | — |
-| — visible commits | — |
-| — restricted-repo commits | — |
-| Pull requests opened | — |
-| Issues opened | — |
-| Public repos | — |
-| Private repos | — |
+| Commits (last year, incl. private) | 603 |
+| — visible commits | 21 |
+| — restricted-repo commits | 582 |
+| Pull requests opened | 0 |
+| Issues opened | 0 |
+| Public repos | 28 |
+| Private repos | 3 |
 <!-- COMMIT-STATS:END -->
 
 ---
