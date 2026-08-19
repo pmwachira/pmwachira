@@ -60,6 +60,6 @@ I design and maintain production data pipelines — orchestration, ELT, and anal
 
 ### 📬 Get in Touch
 
-Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
+Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [LinkedIn](https://www.linkedin.com/in/pmwachira/) [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
 
 <p align="center"><sub>Profile views and stats above update automatically — nothing on this page is manually maintained.</sub></p>
