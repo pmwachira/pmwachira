@@ -94,6 +94,6 @@ _Commit volume per primary language, last 12 months — distinct from the byte-b
 
 ### 📬 Get in Touch
 
-Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [linkedIn] (https://www.linkedin.com/in/pmwachira/) [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
+Open to discussing data engineering roles, pipeline architecture, or collaborating on interesting problems — reach out via [linkedIn](https://www.linkedin.com/in/pmwachira/) [Stack Overflow](https://stackoverflow.com/users/4183833/mushirih) or open an issue on any pinned repo above.
 
 <p align="center"><sub>Profile views and stats above update automatically — nothing on this page is manually maintained.</sub></p>
