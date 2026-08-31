@@ -18,7 +18,7 @@ jobs:
           # GITHUB_TOKEN only sees this repo — fine for nothing here, kept for repo checkout/push.
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Fine-grained PAT scoped to "All repositories" / Contents: Read-only.
-          # Required to see private repos and private contribution counts.
+          # Required to see private repos, org repos you contribute to, and private contribution counts.
           STATS_PAT: ${{ secrets.STATS_PAT }}
           GH_USERNAME: pmwachira
         run: |
@@ -44,6 +44,21 @@ jobs:
                   )
               return data
 
+          def gh_rest_paginated(base_url):
+              results = []
+              page = 1
+              while True:
+                  sep = "&" if "?" in base_url else "?"
+                  paged_url = f"{base_url}{sep}page={page}"
+                  data = gh_rest(paged_url)
+                  if not isinstance(data, list) or not data:
+                      break
+                  results.extend(data)
+                  if len(data) < 100:
+                      break
+                  page += 1
+              return results
+
           def gh_graphql(query, variables):
               payload = json.dumps({"query": query, "variables": variables})
               result = subprocess.run(
@@ -67,11 +82,11 @@ jobs:
                   "variables > Actions in this repo."
               )
 
-          # ---- Language breakdown (includes private repos, since PAT can see them) ----
-          repos = gh_rest(f"https://api.github.com/user/repos?per_page=100&affiliation=owner,collaborator,organization_member")
-          
-          if not isinstance(repos, list):
-              raise RuntimeError(f"Expected a list of repos, got: {repos}")
+          # ---- Language breakdown (includes private + org-contributed repos, paginated) ----
+          repos = gh_rest_paginated(
+              "https://api.github.com/user/repos?per_page=100&affiliation=owner,collaborator,organization_member"
+          )
+
           totals = Counter()
           for repo in repos:
               if repo.get("fork"):
@@ -88,7 +103,7 @@ jobs:
               lang_rows.append(f"| {lang} | {pct:.1f}% |")
           lang_table = "| Language | Share |\n|---|---|\n" + "\n".join(lang_rows)
 
-          # ---- Commit stats, including private contributions ----
+          # ---- Commit stats, including private contributions and org repos ----
           query = """
           query($login: String!) {
             user(login: $login) {
@@ -105,7 +120,6 @@ jobs:
                   }
                 }
               }
-              
               privateRepos: repositories(privacy: PRIVATE, affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
               publicRepos: repositories(privacy: PUBLIC, affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
             }
@@ -113,7 +127,7 @@ jobs:
           """
           result = gh_graphql(query, {"login": username})
           contrib = result["data"]["user"]["contributionsCollection"]
-          private_repo_count = result["data"]["user"]["repositories"]["totalCount"]
+          private_repo_count = result["data"]["user"]["privateRepos"]["totalCount"]
           public_repo_count = result["data"]["user"]["publicRepos"]["totalCount"]
 
           visible_commits = contrib["totalCommitContributions"]
@@ -133,10 +147,13 @@ jobs:
           )
 
           # ---- Technology of commits: commit count per primary language ----
-          # Note: only covers repos visible to the PAT (own repos, public + private).
+          # Note: only covers repos visible to the PAT (owned + collaborator/org-member repos).
           # This is commit *volume* per language, distinct from the byte-based
           # language breakdown above (a language can dominate commit count while
-          # being a small share of total bytes, or vice versa).
+          # being a small share of total bytes, or vice versa). Also, each repo
+          # is bucketed under its single primaryLanguage — a minority language
+          # like LookML in a mostly-Python repo will be counted as Python here,
+          # even though it appears correctly in the byte-based table above.
           commit_lang_totals = Counter()
           for entry in contrib["commitContributionsByRepository"]:
               repo_info = entry["repository"]
