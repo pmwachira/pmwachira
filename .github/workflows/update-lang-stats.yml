@@ -68,7 +68,8 @@ jobs:
               )
 
           # ---- Language breakdown (includes private repos, since PAT can see them) ----
-          repos = gh_rest(f"https://api.github.com/user/repos?per_page=100&affiliation=owner")
+          repos = gh_rest(f"https://api.github.com/user/repos?per_page=100&affiliation=owner,collaborator,organization_member")
+          
           if not isinstance(repos, list):
               raise RuntimeError(f"Expected a list of repos, got: {repos}")
           totals = Counter()
@@ -104,8 +105,9 @@ jobs:
                   }
                 }
               }
-              repositories(privacy: PRIVATE, ownerAffiliations: OWNER) { totalCount }
+              
               publicRepos: repositories(privacy: PUBLIC, ownerAffiliations: OWNER) { totalCount }
+              publicRepos: repositories(privacy: PUBLIC, affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
             }
           }
           """
