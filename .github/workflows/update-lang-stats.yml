@@ -106,7 +106,7 @@ jobs:
                 }
               }
               
-              publicRepos: repositories(privacy: PUBLIC, ownerAffiliations: OWNER) { totalCount }
+              privateRepos: repositories(privacy: PRIVATE, affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
               publicRepos: repositories(privacy: PUBLIC, affiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]) { totalCount }
             }
           }
