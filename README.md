@@ -59,9 +59,9 @@ _Includes private-repo commits (counted, not exposed — file names and messages
 <!-- COMMIT-STATS:START -->
 | Metric | Count |
 |---|---|
-| Commits (last year, incl. private) | 649 |
-| — visible commits | 24 |
-| — restricted-repo commits | 625 |
+| Commits (last year, incl. private) | 736 |
+| — visible commits | 22 |
+| — restricted-repo commits | 714 |
 | Pull requests opened | 0 |
 | Issues opened | 0 |
 | Public repos | 28 |
@@ -75,8 +75,8 @@ _Commit volume per primary language, last 12 months — distinct from the byte-b
 <!-- COMMIT-LANG-STATS:START -->
 | Language | Commits | Share |
 |---|---|---|
-| Python | 13 | 54.2% |
-| Other | 11 | 45.8% |
+| Other | 15 | 68.2% |
+| Python | 7 | 31.8% |
 <!-- COMMIT-LANG-STATS:END -->
 
 ---
