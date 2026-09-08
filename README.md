@@ -2,6 +2,9 @@
 <h3 align="center">Data Engineer · Building reliable pipelines with Python, SQL, Airflow & dbt</h3>
 
 <p align="center">
+  <a href="https://www.linkedin.com/in/pmwachira">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+  </a>
   <a href="https://stackoverflow.com/users/4183833/mushirih">
     <img src="https://img.shields.io/badge/Stack%20Overflow-FE7A16?style=flat&logo=stack-overflow&logoColor=white" alt="Stack Overflow"/>
   </a>
