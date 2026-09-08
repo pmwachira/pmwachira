@@ -27,6 +27,8 @@ I design and maintain production data pipelines — orchestration, ELT, and anal
 ### 🛠️ Tech Stack
 
 <p>
+  <img src="https://img.shields.io/badge/Looker-4285F4?style=flat&logo=looker&logoColor=white" alt="Looker"/>
+  <img src="https://img.shields.io/badge/LookML-4285F4?style=flat&logo=looker&logoColor=white" alt="LookML"/>
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/SQL-4479A1?style=flat&logo=postgresql&logoColor=white" alt="SQL"/>
   <img src="https://img.shields.io/badge/Apache%20Airflow-017CEE?style=flat&logo=apacheairflow&logoColor=white" alt="Airflow"/>
