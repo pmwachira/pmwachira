@@ -8,7 +8,6 @@
   <a href="https://stackoverflow.com/users/4183833/mushirih">
     <img src="https://img.shields.io/badge/Stack%20Overflow-FE7A16?style=flat&logo=stack-overflow&logoColor=white" alt="Stack Overflow"/>
   </a>
-  <img src="https://img.shields.io/badge/Location-Nairobi%2C%20Kenya-informational?style=flat" alt="Location"/>
 </p>
 
 ---
